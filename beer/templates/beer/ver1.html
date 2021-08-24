@@ -1,0 +1,253 @@
+{% if user.is_authenticated %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link href="static/beer/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/beer/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+    crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'beer/css/style.css' %}">
+  <meta charset="UTF-8">
+  <title>맥주간유사도</title>
+  <style>
+    h1 {
+      text-align: center;
+      color: white;
+    }
+
+    select {
+      font-weight: bold;
+      font-size: 1.3em;
+      width: 200px;
+      padding: .5em .5em;
+      border: 1px solid #999;
+      border-radius: 0px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      color: black;
+    }
+
+    input[type=text] {
+      width: 190px;
+      height: 30px;
+      font-size: 20px;
+    }
+
+    #cloud-intro {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      z-index: -1;
+      background:
+        url(https://tistory1.daumcdn.net/tistory/4706624/skin/images/background_ver.png) 0 200px,
+
+        url(https://tistory1.daumcdn.net/tistory/4706624/skin/images/background_ver2.png) 0 900px;
+      animation: wind 60s linear infinite;
+    }
+
+    @keyframes wind {
+      0% {
+        background-position: 0 200px, 0 300px, 100px 250px;
+      }
+
+      100% {
+        background-position: 1000px 200px, 1200px 300px, 1100px 250px;
+      }
+
+    }
+    .preloader {
+  display:inline;
+  z-index: 2000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transition: opacity .65s ease;
+  display: flex; justify-content: center; line-height:900px;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="cloud-intro"></div>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top " style="background-color: #000000; font-weight: bold;">
+    <div class="container d-flex align-items-center">
+      <img src="static\beer\img\glass.png" style="width: 50px;">
+      <h1 class="logo me-auto" style="font-weight: bold;"><a href="/">BEERCRAFT</a></h1>
+
+      <nav id="navbar" class="navbar">
+        {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+        {% else %}
+        <a class="nav-link" href="{% url 'common:login' %}?next={{ request.path }}">로그인</a>
+        {% endif %}
+    </div>
+    </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <div class="contents_container " style="display: flex ;justify-content: space-around;align-items: center; flex-wrap: nowrap; "
+    data-aos="fade-up">
+    <div id='contents' style="text-align:center; position: absolute;">
+
+      <div style=" margin-top: 100px;">
+        <ul style="font-size: 1.5em; font-weight: bold;">
+          # 본인이 가장 좋아하는 맥주는 무엇인가요?<br>
+          # 맛, 향, 목넘김 중 어떤게 가장 중요한가요? <br>
+        </ul>
+        <form method="POST" onSubmit="return false;" name="beerForm">
+          <br>
+          {% csrf_token %}
+          <select name="beer" style='text-align-last:center; cursor: pointer;' id="selectBeer">
+            {% for tmp in beer_list %}
+            <!-- 널값 체크를 위해 안내 문구가 담긴 빈 option 추가 -->
+            <option value="" selected disabled hidden>맥주를 선택해 주세요</option>
+            <option value='{{tmp}}'>{{tmp}}</option>
+            {% endfor %}
+          </select><br><br>
+          <select name="detail" style='text-align-last:center; cursor: pointer;' id="selectFeature">
+            <!-- 널값 체크를 위해 안내 문구가 담긴 빈 option 추가 -->
+            <option value="" selected disabled hidden>항목을 선택해 주세요</option>
+            <option value="Flavor">맛</option>
+            <option value="Aroma">향</option>
+            <option value="Mouthfeel">목넘김</option>
+          </select><br><br>
+          <button type="submit" style="background-color: white;
+                border: rgb(117, 117, 117) 0.5px solid;
+                font-size: 1.5em;
+                font-weight: bold;"
+                id="btnSubmit"> 제출 </button>
+        </form>
+        <ul class="mt-5" style="font-size: 1.5em; font-weight: bold;">마셔본 맥주가 없다면?
+          <a href='/ver4' style='color:black;'>
+            <font color="#4B4B4B" onmouseover="this.style.color='#ffc045'" onmouseout="this.style.color='#4B4B4B'">
+            Click!</a>
+          </ul>
+      </div>
+    </div>
+  </div>
+  <div id="cloud-intro"></div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <h6>About</h6>
+          <p class="text-justify">멋쟁이사자처럼 인공지능 통합과정 3기 8회차 FINAL 1팀 .
+          </p>
+          <p>
+            References:: <a
+              href="https://github.com/statseminar/Beer-recommendation-system">https://github.com/statseminar/Beer-recommendation-system</a>
+
+            <a
+              href="https://github.com/mdv3101/Beer-Label-Classification-using-SIFT">https://github.com/mdv3101/Beer-Label-Classification-using-SIFT</a>
+
+              <a
+              href="https://devsmile.tistory.com/entry/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%9D%B4%EB%AF%B8%EC%A7[…]%ED%8A%B8-%EC%B6%94%EC%B6%9C%ED%95%98%EA%B8%B0-1-tesseract">https://devsmile.tistory.com/entry/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%9D%B4%EB%AF%B8%EC%A7[…]%ED%8A%B8-%EC%B6%94%EC%B6%9C%ED%95%98%EA%B8%B0-1-tesseract</a>
+
+              <a
+              href="http://www.beerforum.co.kr/index.php?mid=beer_tastingnote&page=1&document_srl=424174">http://www.beerforum.co.kr/index.php?mid=beer_tastingnote&page=1&document_srl=424174</a>
+              <a
+              href="https://western-sky.tistory.com/58">https://western-sky.tistory.com/58</a>
+          
+              <a
+              href="https://github.com/tobigs-reco-conf-1314/Tommelier">https://github.com/tobigs-reco-conf-1314/Tommelier</a>
+          
+          
+            </p>
+
+          
+          Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a
+            href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+        </div>
+      </div>
+      <hr>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+          <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by ==></p>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <ul class="social-icons">
+            <li><a href="https://blog.naver.com/flowermisty">이용석</a></li>
+            <li><a href="https://github.com/ijo0r98">임주란</a></li>
+            <li><a href="https://cottonwood-moa.tistory.com/">박건우</a></li>
+            <li><a href="https://github.com/Riah0987">주리아</a></li>
+            <li><a href="https://github.com/kang1seok">강원석</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <div id="loadingIndicator" class="preloader">
+    <div style="font-size: 100px; vertical-align:middle;">
+      <img src="{% static 'beer/img/load.png' %}" id="loading_img">
+    </div>
+    <script src="static/beer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="static/beer/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="static/beer/js/main.js"></script>
+    <script src="static/beer/js/select_image.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+    $('#btnSubmit').on({
+        click: function() {
+          if($('#selectBeer').val()== null) {
+            alert('맥주를 선택해 주세요!')
+            $('#selectBeer').focus();
+          } else if ($('#selectFeature').val()== null) {
+            alert('항목을 선택해 주세요!')
+            $('#selectFeature').focus();
+          }
+           else {
+            document.beerForm.submit();
+          }
+        }
+      })
+  </script>
+       <script>
+        window.onload = function () {
+  document.getElementById("loadingIndicator").style.opacity = "0";
+  setTimeout(function () {
+    document.getElementById("loadingIndicator").style.display = "none";
+  }, 450);
+  }
+    </script>
+</body>
+{% else %}
+  <script>
+    window.location.href = "/common/login/"
+  </script>
+{% endif %}
+
+</html>

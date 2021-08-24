@@ -1,0 +1,7 @@
+*.pyc
+*~
+__pycache__
+django_env
+
+/static
+.DS_Store

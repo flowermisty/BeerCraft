@@ -1,0 +1,900 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>BEER CRAFT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BEER CRAFT #Beer Recommandation System">
+  <meta property="og:title" content="BEER CRAFT">
+  <meta property="og:description" content="BEER CRAFT #Beer Recommandation System">
+  <meta property="og:image" content="static/beer/img/beer_wordcloud.png">
+  <link rel="icon" href="static/beer/img/glass.png" />
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link href="static/beer/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/beer/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'beer/css/style.css' %}">
+  <style>
+    .preloader {
+      display: inline;
+      z-index: 2000;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: opacity .65s ease;
+      display: flex;
+      justify-content: center;
+      line-height: 900px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top " style="background-color: #000000; font-weight: bold;">
+    <div class="container d-flex align-items-center">
+      <img src="static\beer\img\glass.png" style="width: 50px;">
+      <h1 class="logo me-auto" style="font-weight: bold;"><a href="/">BEERCRAFT</a></h1>
+
+      <nav id="navbar" class="navbar">
+        {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'common:logout' %}?next={{ request.path }}">{{ user.username }} (로그아웃)</a>
+        {% else %}
+        <a class="nav-link" href="{% url 'common:login' %}?next={{ request.path }}">로그인</a>
+        {% endif %}
+    </div>
+    </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Rendering Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+          data-aos="fade-up">
+          <h1 style="font-size: 75px;">TEAM BREWING</h1><br><br>
+          <h2 style="font-size: 30px;">#Beer Recommandation System</h2>
+          <h2 style="font-size: 45px;">
+            What to Drink Next?<br><br>
+          </h2>
+          <div class="d-flex justify-content-center justify-content-lg-start">
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in">
+          <img src="static\beer\img\beer.png" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End -->
+  <div class="section-title" style="margin-top: 80px;" data-aos="zoom-in">
+    <h2>2021년<br><br>한국의 맥주 트렌드</h2>
+    <p style="font-size:18px;">"맥주" 키워드로 수집한 글자 약 <strong>150만개</strong>를 바탕으로 살펴보는 트렌드</p>
+  </div>
+  <section id="word_cloud" style=" display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;">
+
+    <div style="display: flex; flex-direction: column; width: 500px; justify-content: space-around">
+      <div>
+
+      </div>
+      <div data-aos="zoom-in-right">
+        <h2 style="font-weight: bold;">맥주와 안주</h2>
+        <p style="font-size:18px;">역시나 안주에 관련된 키워드들이 많이 보인다. "치즈"와 "치킨", "오징어", "피자" 같은 키워드들이 보이고, 수제맥주의 관심이 커짐에 따라
+          "수제"라는 키워드도 확인할 수 있다.
+          그리고 "제주"는 핫한 수제맥주 중 "제주맥주"의 영향을 받았을 것으로 보인다. "편의점"은 맥주하면 빠지면 섭한 키워드이기도 하다.
+          "튀김" "간단" "감자" "에일" "라거" "곰표" 등의 키워드 등이 있다.
+      </div>
+      <div>
+
+      </div>
+    </div>
+
+    <div>
+      <img src="static/beer/img/beer_wordcloud.png" data-aos="fade-up">
+    </div>
+
+    <div style="display: flex; flex-direction: column; width: 500px; justify-content: space-around">
+      <div data-aos="zoom-in-left">
+
+        <h2 style="font-weight: bold;">탈모 치료제?</h2>
+        <p style="font-size:18px;">2021년에 맥주 효모 샴푸가 사람들에게 인기를 얻으면서 효모의 효능에 관한 키워드들이 주류를 이룬다.
+          맥주 효모 샴푸는 특히나 네이버 쇼핑에서 키워드 1위까지 달성하면서 2021년을 뜨겁게 달구어 연관단어를 많이 찾아볼 수 있다.
+        </p>
+      </div>
+      <div>
+      </div>
+      <div data-aos="zoom-in-left">
+        <h2 style="font-weight: bold;">느낌적인 느낌</h2>
+        <p style="font-size:18px;">
+          "여름", "시원하다" , "함께", '즐기다' 계절감이 느껴지는 키워드들도 보인다.
+          아무래도 최신 포스팅이 우선적으로 스크랩되다 보니 스크랩 시기가 기준이 된다.
+          "저녁" "친구" "기분"은 맥주와 너무나 잘 어울리는 단어다.
+          "다양하다" 는 편의점에서 맥주의 종류가 날이 갈수록 늘어남에 따라 영향을 받은 것으로 보인다.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <main id="main">
+    <!-- ======= Description Section ======= -->
+    <section id="why-us" class="why-us section-bg">
+      <div class="container-fluid" data-aos="fade-up">
+        <div class="row">
+          <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
+            <div class="content">
+              <h3>
+                <div id="top" style="color: black; font-weight: bold;">추천 유형을 선택해주세요</div><br>
+              </h3>
+              <p>
+              </p>
+            </div>
+            <div class="accordion-list mt-3">
+              <ul>
+                <li>
+                  <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1"><span>01</span>맥주간
+                    유사도 기반 추천 <i class="bx bx-chevron-down icon-show"></i><i
+                      class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
+                    <p style="color: white; font-size: 18px;">
+                      사용자가 선호하는 맥주와, 맥주 선택시 가장 중요한 요소에 가중을 두어 유사도가 높은 맥주를 추천 합니다.
+                    </p>
+                    <br>
+                    <div style="display: flex; justify-content: space-around;">
+                      <a href="ver1" style="color: #fffefe; font-weight: bold;" class="mt-5">시작하기</a>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2" class="collapsed"><span>02</span> 내
+                    평점이 반영된 맥주 추천 <i class="bx bx-chevron-down icon-show"></i><i
+                      class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
+                    <p style="color: white; font-size: 18px;">
+                      사용자의 경험에 기반하여 경험하지 못한 맥주에 대한 사용자의 평점을 예측, <br> 가장 평점이 높을 것 으로 예상되는 3가지 맥주를 추천 합니다.
+                    </p>
+                    <br>
+                    <div style="display: flex; justify-content: space-around;">
+                      <a href="ver2" style="color: #ffffff; font-weight: bold;" class="mt-5">시작하기</a>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-4" class="collapsed"><span>03</span>
+                    맥주 이미지 분류 <i class="bx bx-chevron-down icon-show"></i><i
+                      class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-4" class="collapse" data-bs-parent=".accordion-list">
+                    <p style="color: white; font-size: 18px;">
+                      혹시, 모르는 맥주 앞에서 고민이신가요? <br> 맥주의 사진을 보여주세요!
+                    </p>
+                    <br>
+                    <div style="display: flex; justify-content: space-around;">
+                      <a href="image_upload" style="color: #ffffff; font-weight: bold;" class="mt-5">시작하기</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img"
+            style='background-image: url("static/beer/img/analysis.png");' data-aos="zoom-in">&nbsp;
+          </div>
+        </div>
+      </div>
+    </section><!-- End -->
+    <!-- ======= beer_category section ======= -->
+    <section id="portfolio" class="portfolio">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          
+          <h2><img src="static/beer/img/south-korea.png" style="width:64px;"> 국산 수제 맥주</h2>
+          <h4>같이 이야기하면서 리뷰도 하고 그래요.</h4>
+        </div>
+        <ul id="portfolio-flters" class="d-flex justify-content-center" data-aos="fade-up">
+          <li data-filter="*" class="filter-active">All</li>
+          <li data-filter=".ale">에일</li>
+          <li data-filter=".lager">라거</li>
+          <li data-filter=".jeju">제주맥주</li>
+          <li data-filter=".hand">핸드앤몰트</li>
+          <li data-filter=".platinum">플래티넘맥주</li>
+          <li data-filter=".seven">세븐브로이</li>
+          <li data-filter=".ARK">ARK</li>
+          <li data-filter=".car">카브루</li>
+          <li data-filter=".amazing">어메이징브루잉컴퍼니</li>
+        </ul>
+        <div class="row portfolio-container" data-aos="fade-up">
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <a href="static/beer/img/craftBeer/JejuPeLLongAle.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuPeLLongAle.jpg" class="img-fluid"
+                  alt=""></a>
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 펠롱 에일</h4> <br>
+              <form method="POST" action="/detail/{{ DetailInfo_list.0.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <a href="static/beer/img/craftBeer/JejuWitAle.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuWitAle.jpg" class="img-fluid"
+                  alt=""></a>
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 위트 에일</h4> <br>
+              <form method="POST" action="/detail/{{ DetailInfo_list.1.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <a href="static/beer/img/craftBeer/JejuSlice.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuSlice.jpg" class="img-fluid"
+                  alt=""></a>
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 슬라이스</h4> <br>
+              <form method="POST" action="/detail/{{ DetailInfo_list.2.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/JejuGeoMeongAle.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuGeoMeongAle.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 거멍에일</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.3.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/JejuImperial.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuImperial.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 배럴 시리즈 임페리얼 스타우트</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.4.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/JejuBaek.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuBaek.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 백록담</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.5.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item ale jeju">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/JejuSun.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/JejuSun.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>제주 성산일출봉</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.6.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item hand jeju">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/sangsang.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/sangsang.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>상상 페일 에일</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.7.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumStrong.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumStrong.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>강한 IPA</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.8.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumPaleAle.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumPaleAle.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>에일의 정석</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.9.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumLifeAle.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumLifeAle.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>인생 에일</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.10.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumCow.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumCow.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>흑당 밀키 스타우트</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.11.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum lager">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/GoHome.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/GoHome.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>퇴근길</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.12.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/GoHome2.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/GoHome2.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>퇴근길2</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.13.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumAlley.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumAlley.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>골목 대장</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.14.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumKoreaIPA.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumKoreaIPA.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>대한 IPA</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.15.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumWale.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumWale.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>술고래</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.16.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item platinum ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/PlatinumOrange.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/PlatinumOrange.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>오늘 - 오렌지는 늘 옳다</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.17.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item seven ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/Gangseo.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/Gangseo.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>강서</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.18.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item seven ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/bear.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/bear.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>곰표 밀 맥주</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.19.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item seven ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/Hangang.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/Hangang.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>한강</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.20.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item seven ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/mac.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/mac.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>맥아 , 더</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.21.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item seven lager">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/HeungChung.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/HeungChung.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>흥청망청</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.22.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item ARK ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/Gwang.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/Gwang.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>광화문</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.23.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item car ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/Gyeong.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/Gyeong.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>경복궁</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.24.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item ARK lager">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/ARK.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/ARK.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>ARK</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.25.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item car ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/namsan.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/namsan.jpg" class="img-fluid" alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>남산</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.26.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item amazing lager">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/seoulForest.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/seoulForest.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>서울숲 수제라거</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.27.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- 사진하고 admin subject 이름이 같아야 함 -->
+          <div class="col-lg-3 col-md-5 portfolio-item amazing ale">
+            <div class="portfolio-img">
+              <!-- 사진 수정 -->
+              <a href="static/beer/img/craftBeer/Twilight.jpg" data-gallery="portfolioGallery"
+                class="portfolio-lightbox"><img src="static/beer/img/craftBeer/Twilight.jpg" class="img-fluid"
+                  alt=""></a>
+              <!-- 이름 수정 -->
+            </div>
+            <div class="portfolio-info">
+              <h4>노을 수제 에일</h4> <br>
+              <!-- 리스트 수정 -->
+              <form method="POST" action="/detail/{{ DetailInfo_list.28.id }}">
+                {% csrf_token %}
+                <button class="details-link btn btn-dark" title="More Details" type="submit" name="beer_category"
+                  value="Cass"><i class="bx bx-link"></i></button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+  <!-- Site footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <h6>About</h6>
+          <p class="text-justify">멋쟁이사자처럼 인공지능 통합과정 3기 8회차 FINAL 1팀 .
+          </p>
+          <p>
+            References:: <a
+              href="https://github.com/statseminar/Beer-recommendation-system">https://github.com/statseminar/Beer-recommendation-system</a>
+
+            <a
+              href="https://github.com/mdv3101/Beer-Label-Classification-using-SIFT">https://github.com/mdv3101/Beer-Label-Classification-using-SIFT</a>
+
+              <a
+              href="https://devsmile.tistory.com/entry/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%9D%B4%EB%AF%B8%EC%A7[…]%ED%8A%B8-%EC%B6%94%EC%B6%9C%ED%95%98%EA%B8%B0-1-tesseract">https://devsmile.tistory.com/entry/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%9D%B4%EB%AF%B8%EC%A7[…]%ED%8A%B8-%EC%B6%94%EC%B6%9C%ED%95%98%EA%B8%B0-1-tesseract</a>
+
+              <a
+              href="http://www.beerforum.co.kr/index.php?mid=beer_tastingnote&page=1&document_srl=424174">http://www.beerforum.co.kr/index.php?mid=beer_tastingnote&page=1&document_srl=424174</a>
+              <a
+              href="https://western-sky.tistory.com/58">https://western-sky.tistory.com/58</a>
+          
+              <a
+              href="https://github.com/tobigs-reco-conf-1314/Tommelier">https://github.com/tobigs-reco-conf-1314/Tommelier</a>
+          
+          
+            </p>
+
+          
+          Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a
+            href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+        </div>
+      </div>
+      <hr>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+          <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by ==></p>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <ul class="social-icons">
+            <li><a href="https://blog.naver.com/flowermisty">이용석</a></li>
+            <li><a href="https://github.com/ijo0r98">임주란</a></li>
+            <li><a href="https://cottonwood-moa.tistory.com/">박건우</a></li>
+            <li><a href="https://github.com/Riah0987">주리아</a></li>
+            <li><a href="https://github.com/kang1seok">강원석</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <div id="loadingIndicator" class="preloader">
+    <div style="font-size: 100px; vertical-align:middle;">
+      <img src="{% static 'beer/img/load.png' %}" id="loading_img">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="static/beer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="static/beer/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="static/beer/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="static/beer/js/main.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <script>
+      window.onload = function () {
+        document.getElementById("loadingIndicator").style.opacity = "0";
+        setTimeout(function () {
+          document.getElementById("loadingIndicator").style.display = "none";
+        }, 450);
+      }
+    </script>
+</body>
+
+</html>

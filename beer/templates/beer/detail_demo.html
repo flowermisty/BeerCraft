@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>맥주정보</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link href="static/beer/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/beer/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/beer/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+    integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+    crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+  <link href="static\beer\css\style.css" rel="stylesheet">
+  <style>
+    .preloader {
+      display: inline;
+      z-index: 2000;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: white;
+      transition: opacity .65s ease;
+      display: flex;
+      justify-content: center;
+      line-height: 900px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="header" class="fixed-top " style="background-color: #000000; font-weight: bold;" data-aos-delay="200">
+    <div class="container d-flex align-items-center">
+      <img src="static\beer\img\glass.png" style="width: 50px;">
+      <h1 class="logo me-auto" style="font-weight: bold;"><a href="/">BEERCRAFT</a></h1>
+
+      <nav id="navbar" class="navbar">
+        {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+        {% else %}
+        <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
+        {% endif %}
+    </div>
+    </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+  <!-- ======= Details Section ======= -->
+  <section id="portfolio-details" class="portfolio-details" style="margin-top: 5%;">
+    <div class="container">
+
+      <div class="row gy-4" data-aos="zoom-in">
+
+        <div class="col-lg-8">
+          <div class="swiper-slide">
+            <img src="static/beer/img/{{ beer_info.0.subject }}.jpg" style="width: 500px; height:700px;">
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="portfolio-info">
+
+            {% if question_list %}
+            <ul>
+            {% for question in question_list %}
+                <li><a href="/beer/{{ question.id }}/">{{ question.subject }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>질문이 없습니다.</p>
+        {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- {% for info in beer_info.all  %}
+              <h1>{{ info.subject }}</h1> 
+              <p>{{ info.info }}</p> 
+              <p>{{ info.comments.all }}</p>
+            {% endfor %} -->
+
+            <!-- <h3>{{ beer_info.0.subject }}</h3>
+            <ul>
+              <li><strong>ALC</strong>: {{ beer_alc }}</li>
+              <li><strong>INFO</strong>: {{ beer_info.0.info }}</li>
+              <li><strong>구매링크</strong>: <a href="#" style="color: black;">{{ beer_link }}</a></li>
+            </ul> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- {% for comment in beer_info.all %}
+    <p>comment {{ comment.comments.all }}</p><br>
+    <p>comment_text {{ comment.comment_text|linebreaks }}</p>
+    <p>랄라{{ comment.comments.all.1 }}</p> 
+    {% endfor %} -->
+
+    <!-- {% for comment in blog.comments.all %}
+    <div class="comment">
+      <div class="date">
+        {{ comment.created_at }}
+      </div>
+      <strong>{{ comment.author_name }}</strong>
+      <p>{{ comment.comment_text|linebreaks }}</p>
+    </div>
+    {% empty %}
+    <p>No comments here yet :(</p>
+    {% endfor %} -->
+
+  </section>
+
+
+  </main><!-- End #main -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <h6>About</h6>
+          <p class="text-justify">멋쟁이사자처럼 인공지능 통합과정 3기 8회차 FINAL 1팀 .</p>
+          <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+            in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+      <hr>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+          <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by ==></p>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <ul class="social-icons">
+            <li><a href="#">이용석</a></li>
+            <li><a href="#">임주란</a></li>
+            <li><a href="#">박건우</a></li>
+            <li><a href="#">주리아</a></li>
+            <li><a href="#">강원석</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <div id="loadingIndicator" class="preloader">
+    <div style="font-size: 100px; vertical-align:middle;">
+      <img src="{% static 'beer/img/load.png' %}" id="loading_img">
+    </div>
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+    <script src="static/beer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="static/beer/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="static/beer/js/main.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <script>
+      window.onload = function () {
+        document.getElementById("loadingIndicator").style.opacity = "0";
+        setTimeout(function () {
+          document.getElementById("loadingIndicator").style.display = "none";
+        }, 450);
+      }
+    </script>
+</body>
+
+</html>
