@@ -9,7 +9,6 @@
 
 #### 🛠 프로젝트설명
 [fina_pr1팀-beer recommandation system.pdf](https://github.com/flowermisty/BeerCraft/files/7052171/fina_pr1.-beer.recommandation.system.pdf)
-[Uploading fina_pr1팀-beer recommandation system.pdf…]()
 
 #### 🛠 환경
 - python3.8
