@@ -34,13 +34,13 @@
 - Pytorch & CNN & 전이학습 이용한 맥주 이미지 라벨링(현재 5개의 맥주 구별 가능)
 - 국내 수제 맥주 상세 페이지에서 리뷰 및 댓글 작성
 
-#### 📌 진행 과정 및 코드 안내
-- 블로그 포스팅 https://juran-devblog.tistory.com/127?category=871212
+#### 📌 배포 과정 및 코드 안내
+- 블로그 포스팅 https://flowermisty.tistory.com/44?category=967097
 - 깃허브 https://github.com/ijo0r98/likelion-kdigital/tree/main/final-project
 
 #### 👯‍♂️ 팀원
+- 이용석 https://flowermisty.tistory.com/
 - 임주란 https://github.com/ijo0r98/
-- 이용석 https://blog.naver.com/flowermisty
 - 박건우 https://cottonwood-moa.tistory.com/
 - 강원석 https://github.com/kang1seok
 - 주리아 https://github.com/Riah0987
